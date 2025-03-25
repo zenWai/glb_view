@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Brain Heatmap Viewer</title>
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer@v3.4.0/dist/model-viewer.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -94,6 +94,10 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
+            z-index: 10;
+            background-color: rgba(255,255,255,0.8);
+            padding: 20px;
+            border-radius: 8px;
         }
         
         .spinner {
@@ -121,6 +125,27 @@
             z-index: 100;
         }
         
+        .debug-panel {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            display: none;
+        }
+        
+        .debug-panel h3 {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .debug-panel pre {
+            background-color: #eee;
+            padding: 5px;
+            overflow: auto;
+            max-height: 100px;
+        }
+        
         .footer {
             background-color: white;
             padding: 1rem;
@@ -137,6 +162,18 @@
         
         .footer a:hover {
             text-decoration: underline;
+        }
+        
+        .debug-toggle {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background-color: #eee;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
         }
         
         @keyframes spin {
@@ -191,12 +228,29 @@
                 ar-scale="fixed"
                 loading="eager"
                 reveal="interaction"
-                crossorigin="anonymous">
+                crossorigin="anonymous"
+                min-camera-orbit="auto auto auto"
+                max-camera-orbit="auto auto 10m"
+                min-field-of-view="10deg"
+                max-field-of-view="90deg"
+                environment-image="neutral"
+                skybox-image="">
             </model-viewer>
             
             <div class="controls-hint">
                 Click and drag to rotate | Scroll to zoom | Double-tap for AR (on supported devices)
             </div>
+            
+            <button class="debug-toggle" onclick="toggleDebugPanel()">Debug</button>
+        </div>
+        
+        <div id="debug-panel" class="debug-panel">
+            <h3>Debug Information</h3>
+            <p>Model URL: <span id="model-url-display">none</span></p>
+            <p>Proxy URL: <span id="proxy-url-display">none</span></p>
+            <p>Status: <span id="status-display">Initializing...</span></p>
+            <h3>Log:</h3>
+            <pre id="debug-log"></pre>
         </div>
     </div>
     
@@ -205,6 +259,26 @@
     </div>
     
     <script>
+        // Debug log function
+        function log(message) {
+            console.log(message);
+            const logElement = document.getElementById('debug-log');
+            if (logElement) {
+                logElement.textContent = message + '\n' + logElement.textContent;
+            }
+            
+            // Update status display
+            const statusElement = document.getElementById('status-display');
+            if (statusElement) {
+                statusElement.textContent = message;
+            }
+        }
+        
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debug-panel');
+            panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             const modelViewer = document.getElementById('brain-model');
             const loading = document.getElementById('loading');
@@ -215,63 +289,96 @@
             const urlParams = new URLSearchParams(window.location.search);
             const modelUrl = urlParams.get('model');
             
+            // Update debug panel
+            document.getElementById('model-url-display').textContent = modelUrl || 'none';
+            
             if (modelUrl) {
                 // Show loading indicator
                 loading.style.display = 'block';
                 
-                // Add CORS proxy to the model URL to bypass CORS restrictions
-                const corsProxyUrl = `https://corsproxy.io/?${encodeURIComponent(modelUrl)}`;
+                // Try different proxies
+                const proxies = [
+                    {
+                        name: "allorigins",
+                        url: `https://api.allorigins.win/raw?url=${encodeURIComponent(modelUrl)}`
+                    },
+                    {
+                        name: "corsproxy.io",
+                        url: `https://corsproxy.io/?${encodeURIComponent(modelUrl)}`
+                    },
+                    {
+                        name: "cors.bridged.cc",
+                        url: `https://cors.bridged.cc/${modelUrl}`
+                    }
+                ];
                 
-                // Set other attributes
-                modelViewer.setAttribute('crossorigin', 'anonymous');
+                // Try the first proxy
+                tryLoadModel(proxies, 0);
                 
-                // Set the model source to the proxied URL
-                modelViewer.src = corsProxyUrl;
-                console.log("Loading model from:", corsProxyUrl);
+                function tryLoadModel(proxyList, index) {
+                    if (index >= proxyList.length) {
+                        // All proxies failed
+                        showFailureMessage();
+                        return;
+                    }
+                    
+                    const proxy = proxyList[index];
+                    log(`Trying proxy: ${proxy.name}`);
+                    document.getElementById('proxy-url-display').textContent = proxy.url;
+                    
+                    modelViewer.src = proxy.url;
+                    
+                    // Listen for successful load
+                    modelViewer.addEventListener('load', function loadHandler() {
+                        log(`Model loaded successfully with ${proxy.name}`);
+                        loading.style.display = 'none';
+                        controlsHint.style.display = 'block';
+                        
+                        // Position camera for a good default view
+                        setTimeout(() => {
+                            try {
+                                modelViewer.cameraOrbit = '0deg 75deg 2m';
+                                modelViewer.fieldOfView = '30deg';
+                                log("Camera positioned");
+                            } catch (e) {
+                                log("Error positioning camera: " + e.message);
+                            }
+                        }, 500);
+                        
+                        // Remove this event listener to avoid duplicates
+                        modelViewer.removeEventListener('load', loadHandler);
+                    }, { once: true });
+                    
+                    // Listen for errors
+                    modelViewer.addEventListener('error', function errorHandler() {
+                        log(`Error with proxy ${proxy.name}, trying next`);
+                        
+                        // Try the next proxy
+                        modelViewer.removeEventListener('error', errorHandler);
+                        tryLoadModel(proxyList, index + 1);
+                    }, { once: true });
+                }
                 
-                // Handle model loading events
-                modelViewer.addEventListener('load', function() {
+                function showFailureMessage() {
                     loading.style.display = 'none';
-                    controlsHint.style.display = 'block';
-                    console.log("Model loaded successfully");
                     
-                    // Set camera position and controls after model loads
-                    setTimeout(() => {
-                        modelViewer.cameraOrbit = '0deg 75deg 2m';
-                        modelViewer.fieldOfView = '30deg';
-                    }, 500);
-                });
-                
-                // Handle errors with fallback options
-                modelViewer.addEventListener('error', function(event) {
-                    console.error('Error loading model with first proxy, trying alternatives:', event);
+                    log("All proxies failed");
                     
-                    // Try another CORS proxy as fallback
-                    const fallbackProxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(modelUrl)}`;
-                    modelViewer.src = fallbackProxyUrl;
-                    console.log("Trying fallback proxy:", fallbackProxyUrl);
+                    // Show error message with direct link option
+                    const errorElement = document.createElement('div');
+                    errorElement.className = 'error-message';
+                    errorElement.innerHTML = `
+                        <h2>Error Loading Model</h2>
+                        <p>There was a problem loading the 3D model using our proxy services.</p>
+                        <p>You can try <a href="${modelUrl}" target="_blank">downloading the model file directly</a> and viewing it with a local 3D viewer.</p>
+                    `;
                     
-                    // Check if this fallback also fails
-                    setTimeout(() => {
-                        if (loading.style.display !== 'none') {
-                            loading.style.display = 'none';
-                            
-                            // Show error message with direct link option
-                            const errorElement = document.createElement('div');
-                            errorElement.className = 'error-message';
-                            errorElement.innerHTML = `
-                                <h2>Error Loading Model</h2>
-                                <p>There was a problem loading the 3D model using our proxy services.</p>
-                                <p>You can try <a href="${modelUrl}" target="_blank">downloading the model file directly</a> and viewing it with a local 3D viewer.</p>
-                            `;
-                            
-                            modelContainer.appendChild(errorElement);
-                        }
-                    }, 5000); // Wait 5 seconds before showing the error
-                });
+                    modelContainer.appendChild(errorElement);
+                }
             } else {
                 // No model URL provided
                 loading.style.display = 'none';
+                log("No model URL provided");
                 
                 // Show error message
                 const errorElement = document.createElement('div');
