@@ -219,30 +219,55 @@
                 // Show loading indicator
                 loading.style.display = 'block';
                 
+                // Add CORS proxy to the model URL to bypass CORS restrictions
+                const corsProxyUrl = `https://corsproxy.io/?${encodeURIComponent(modelUrl)}`;
+                
+                // Set other attributes
                 modelViewer.setAttribute('crossorigin', 'anonymous');
                 
-                // Set the model source
-                modelViewer.src = modelUrl;
+                // Set the model source to the proxied URL
+                modelViewer.src = corsProxyUrl;
+                console.log("Loading model from:", corsProxyUrl);
                 
                 // Handle model loading events
                 modelViewer.addEventListener('load', function() {
                     loading.style.display = 'none';
                     controlsHint.style.display = 'block';
+                    console.log("Model loaded successfully");
+                    
+                    // Set camera position and controls after model loads
+                    setTimeout(() => {
+                        modelViewer.cameraOrbit = '0deg 75deg 2m';
+                        modelViewer.fieldOfView = '30deg';
+                    }, 500);
                 });
                 
-                modelViewer.addEventListener('error', function(error) {
-                    loading.style.display = 'none';
+                // Handle errors with fallback options
+                modelViewer.addEventListener('error', function(event) {
+                    console.error('Error loading model with first proxy, trying alternatives:', event);
                     
-                    // Show error message
-                    const errorElement = document.createElement('div');
-                    errorElement.className = 'error-message';
-                    errorElement.innerHTML = `
-                        <h2>Error Loading Model</h2>
-                        <p>There was a problem loading the 3D model. The file may be unavailable or in an unsupported format.</p>
-                        <p>Error details: ${error}</p>
-                    `;
+                    // Try another CORS proxy as fallback
+                    const fallbackProxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(modelUrl)}`;
+                    modelViewer.src = fallbackProxyUrl;
+                    console.log("Trying fallback proxy:", fallbackProxyUrl);
                     
-                    modelContainer.appendChild(errorElement);
+                    // Check if this fallback also fails
+                    setTimeout(() => {
+                        if (loading.style.display !== 'none') {
+                            loading.style.display = 'none';
+                            
+                            // Show error message with direct link option
+                            const errorElement = document.createElement('div');
+                            errorElement.className = 'error-message';
+                            errorElement.innerHTML = `
+                                <h2>Error Loading Model</h2>
+                                <p>There was a problem loading the 3D model using our proxy services.</p>
+                                <p>You can try <a href="${modelUrl}" target="_blank">downloading the model file directly</a> and viewing it with a local 3D viewer.</p>
+                            `;
+                            
+                            modelContainer.appendChild(errorElement);
+                        }
+                    }, 5000); // Wait 5 seconds before showing the error
                 });
             } else {
                 // No model URL provided
