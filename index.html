@@ -216,29 +216,12 @@
                 <div class="spinner"></div>
                 <p>Loading 3D model...</p>
             </div>
-            
             <model-viewer id="brain-model"
-                camera-controls
-                auto-rotate
-                rotation-per-second="30deg"
-                exposure="0.5"
-                shadow-intensity="1.0"
-                ar
-                ar-modes="webxr scene-viewer quick-look"
-                ar-scale="fixed"
-                loading="eager"
-                reveal="interaction"
-                crossorigin="anonymous"
-                min-camera-orbit="auto auto auto"
-                max-camera-orbit="auto auto 10m"
-                min-field-of-view="10deg"
-                max-field-of-view="90deg"
-                environment-image="neutral"
-                skybox-image="">
+                camera-controls tone-mapping="neutral" shadow-intensity="1">
             </model-viewer>
             
             <div class="controls-hint">
-                Click and drag to rotate | Scroll to zoom | Double-tap for AR (on supported devices)
+                Click and drag to rotate | Scroll to zoom
             </div>
             
             <button class="debug-toggle" onclick="toggleDebugPanel()">Debug</button>
