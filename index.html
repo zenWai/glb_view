@@ -206,8 +206,8 @@
 </head>
 <body>
     <div class="header">
-        <h1>3D Brain Heatmap Viewer</h1>
-        <p>Interactive 3D visualization of brain activity patterns</p>
+        <h1>3D Brain Heatmap</h1>
+        <p>Interactive 3D visualization of brain regions</p>
     </div>
     
     <div class="container">
@@ -217,7 +217,7 @@
                 <p>Loading 3D model...</p>
             </div>
             <model-viewer id="brain-model"
-                camera-controls tone-mapping="neutral" shadow-intensity="1">
+                camera-controls tone-mapping="neutral" shadow-intensity="1" loading="eager">
             </model-viewer>
             
             <div class="controls-hint">
@@ -238,7 +238,7 @@
     </div>
     
     <div class="footer">
-        <p>Powered by <a href="https://modelviewer.dev/" target="_blank">Model Viewer</a> | View on mobile for AR experience</p>
+        <p>Created by <a href="https://github.com/zenWai" target="_blank">Fernando Presa</a> | Developed to support Excel Processor App in visualizing GLB files of 3D brain region heatmaps | Powered by <a href="https://modelviewer.dev/" target="_blank">Model Viewer</a></p>
     </div>
     
     <script>
