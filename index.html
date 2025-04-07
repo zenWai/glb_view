@@ -14,13 +14,13 @@
             --error-color: #cc0000;
             --link-color: #1a73e8;
         }
-        
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-        
+
         body {
             font-family: 'Roboto', Arial, sans-serif;
             background-color: var(--main-bg);
@@ -30,7 +30,7 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .header {
             background-color: var(--header-bg);
             color: var(--header-text);
@@ -38,17 +38,17 @@
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
         .header h1 {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
         }
-        
+
         .header p {
             font-size: 0.9rem;
             font-weight: 300;
         }
-        
+
         .container {
             flex: 1;
             display: flex;
@@ -58,7 +58,7 @@
             margin: 0 auto;
             width: 100%;
         }
-        
+
         #model-container {
             flex: 1;
             position: relative;
@@ -68,7 +68,32 @@
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
+        .action-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .action-button {
+            background-color: #eee;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-button:hover {
+            background-color: #ddd;
+        }
+
         model-viewer {
             width: 100%;
             height: 100%;
@@ -76,7 +101,7 @@
             background-color: #FFFFFF;
             --poster-color: transparent;
         }
-        
+
         .error-message {
             text-align: center;
             color: var(--error-color);
@@ -87,7 +112,7 @@
             margin: 2rem auto;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .loading {
             position: absolute;
             top: 50%;
@@ -99,7 +124,7 @@
             padding: 20px;
             border-radius: 8px;
         }
-        
+
         .spinner {
             width: 40px;
             height: 40px;
@@ -109,7 +134,7 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 1rem;
         }
-        
+
         .controls-hint {
             background-color: rgba(255,255,255,0.8);
             padding: 0.5rem 1rem;
@@ -124,28 +149,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             z-index: 100;
         }
-        
-        .debug-panel {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            display: none;
-        }
-        
-        .debug-panel h3 {
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-        }
-        
-        .debug-panel pre {
-            background-color: #eee;
-            padding: 5px;
-            overflow: auto;
-            max-height: 100px;
-        }
-        
+
         .footer {
             background-color: white;
             padding: 1rem;
@@ -154,231 +158,535 @@
             color: #666;
             box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
         }
-        
+
         .footer a {
             color: var(--link-color);
             text-decoration: none;
         }
-        
+
         .footer a:hover {
             text-decoration: underline;
         }
-        
-        .debug-toggle {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            background-color: #eee;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.7rem;
-        }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         @media (min-width: 768px) {
             .header h1 {
                 font-size: 2rem;
             }
-            
+
             .container {
                 padding: 2rem;
             }
-            
+
             #model-container {
                 min-height: 600px;
             }
-            
+
             model-viewer {
                 min-height: 600px;
             }
-            
+
             .controls-hint {
                 display: block;
             }
         }
+
+        .share-panel {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .share-panel h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .share-input-group {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+
+        .share-input-group input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 0.9rem;
+        }
+
+        .share-input-group button {
+            background-color: var(--header-bg);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .share-input-group button:hover {
+            background-color: #225938;
+        }
+
+        #copy-message {
+            font-size: 0.8rem;
+            color: var(--header-bg);
+            margin-bottom: 0.75rem;
+            display: none;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .share-buttons a {
+            background-color: #f5f5f5;
+            color: #555;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .share-buttons a:hover {
+            background-color: #eee;
+            transform: translateY(-2px);
+        }
+
+        #email-share:hover {
+            color: #555;
+        }
+
+        #twitter-share:hover {
+            color: #1DA1F2;
+        }
+
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>3D Brain Heatmap Viewer</h1>
-        <p>Interactive 3D visualization of brain regions</p>
-    </div>
-    
-    <div class="container">
-        <div id="model-container">
-            <div id="loading" class="loading">
-                <div class="spinner"></div>
-                <p>Loading 3D model...</p>
-            </div>
-            <model-viewer id="brain-model"
-                camera-controls tone-mapping="neutral" shadow-intensity="1" loading="eager">
-            </model-viewer>
-            
-            <div class="controls-hint">
-                Click and drag to rotate | Scroll to zoom
-            </div>
-            
-            <button class="debug-toggle" onclick="toggleDebugPanel()">Debug</button>
+<div class="header">
+    <h1>3D Brain Heatmap Viewer</h1>
+    <p>Interactive 3D visualization of brain regions</p>
+</div>
+
+<div class="container">
+    <div id="model-container">
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading 3D model...</p>
         </div>
-        
-        <div id="debug-panel" class="debug-panel">
-            <h3>Debug Information</h3>
-            <p>Model URL: <span id="model-url-display">none</span></p>
-            <p>Proxy URL: <span id="proxy-url-display">none</span></p>
-            <p>Status: <span id="status-display">Initializing...</span></p>
-            <h3>Log:</h3>
-            <pre id="debug-log"></pre>
+        <model-viewer id="brain-model"
+                      camera-controls tone-mapping="neutral" shadow-intensity="1" loading="eager">
+        </model-viewer>
+
+        <div class="controls-hint">
+            Click and drag to rotate | Scroll to zoom
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-button" onclick="toggleSharePanel()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+                Share
+            </button>
         </div>
     </div>
-    
-    <div class="footer">
-        <p>Developed by <a href="https://github.com/zenWai" target="_blank">Fernando Presa</a> to support GLB files of 3D brain region heatmaps from the Custom Excel Processor app | Powered by <a href="https://modelviewer.dev/" target="_blank">Model Viewer</a></p>
+
+    <div class="share-panel">
+        <h3>Share this view</h3>
+        <div class="share-input-group">
+            <input type="text" id="share-url" readonly>
+            <button id="copy-btn" title="Copy to clipboard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="copy-message">URL copied!</div>
+        <div class="share-buttons">
+            <a id="email-share" href="#" target="_blank" title="Share via Email">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+            </a>
+            <a id="twitter-share" href="#" target="_blank" title="Share on Twitter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                </svg>
+            </a>
+        </div>
     </div>
-    
-    <script>
-        // Debug log function
-        function log(message) {
-            console.log(message);
-            const logElement = document.getElementById('debug-log');
-            if (logElement) {
-                logElement.textContent = message + '\n' + logElement.textContent;
-            }
-            
-            // Update status display
-            const statusElement = document.getElementById('status-display');
-            if (statusElement) {
-                statusElement.textContent = message;
-            }
+
+</div>
+
+<div class="footer">
+    <p>Developed by <a href="https://github.com/zenWai" target="_blank">Fernando Presa</a> to support GLB files of 3D brain region heatmaps from the Custom Excel Processor app | Powered by <a href="https://modelviewer.dev/" target="_blank">Model Viewer</a></p>
+</div>
+
+<script>
+  // Debug configuration
+  const DEBUG_ENABLED = false;
+
+  const DebugModule = {
+    init: function() {
+      if (!DEBUG_ENABLED) return;
+
+      console.log("Debug module initializing...");
+
+      this.injectDebugButton();
+
+      this.injectDebugPanel();
+
+      console.log("Debug module initialized");
+    },
+
+    injectDebugButton: function() {
+      // Wait for DOM to be fully loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this._createDebugButton());
+      } else {
+        this._createDebugButton();
+      }
+    },
+
+    _createDebugButton: function() {
+      const actionButtons = document.querySelector('.action-buttons');
+
+      if (!actionButtons) {
+        console.error("Could not find action buttons container");
+        return;
+      }
+
+      console.log("Creating debug button");
+
+      const self = this; // Store reference to DebugModule
+
+      const debugButton = document.createElement('button');
+      debugButton.className = 'action-button';
+      // We need to use the stored reference to ensure correct context
+      debugButton.onclick = function() { self.toggleDebugPanel(); };
+      debugButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                        <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                        <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                        <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                    </svg>
+                    Debug
+                `;
+
+      actionButtons.appendChild(debugButton);
+      console.log("Debug button created and injected");
+    },
+
+    injectDebugPanel: function() {
+      // Wait for DOM to be fully loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this._createDebugPanel());
+      } else {
+        this._createDebugPanel();
+      }
+    },
+
+    _createDebugPanel: function() {
+      const container = document.querySelector('.container');
+
+      if (!container) {
+        console.error("Could not find container");
+        return;
+      }
+
+      console.log("Creating debug panel");
+
+      const debugPanel = document.createElement('div');
+      debugPanel.id = 'debug-panel';
+      debugPanel.className = 'debug-panel';
+      debugPanel.style.display = 'none';
+      debugPanel.style.marginTop = '10px';
+      debugPanel.style.padding = '10px';
+      debugPanel.style.backgroundColor = '#f8f8f8';
+      debugPanel.style.borderRadius = '8px';
+      debugPanel.style.fontSize = '0.8rem';
+
+      debugPanel.innerHTML = `
+                    <h3 style="margin-bottom: 5px; font-size: 0.9rem;">Debug Information</h3>
+                    <p>Model URL: <span id="model-url-display">none</span></p>
+                    <p>Proxy URL: <span id="proxy-url-display">none</span></p>
+                    <p>Status: <span id="status-display">Initializing...</span></p>
+                    <h3 style="margin-bottom: 5px; font-size: 0.9rem;">Log:</h3>
+                    <pre id="debug-log" style="background-color: #eee; padding: 5px; overflow: auto; max-height: 100px;"></pre>
+                `;
+
+      // Insert at the end of container
+      container.appendChild(debugPanel);
+      console.log("Debug panel created and injected");
+    },
+
+    // Toggle debug panel visibility
+    toggleDebugPanel: function() {
+      console.log("Toggle debug panel called");
+      const panel = document.getElementById('debug-panel');
+      if (!panel) {
+        console.error("Debug panel not found");
+        return;
+      }
+
+      panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
+      console.log("Debug panel visibility: " + panel.style.display);
+    },
+
+    // Log message to debug console and UI if enabled
+    log: function(message) {
+      if (!DEBUG_ENABLED) return;
+
+      console.log(message);
+
+      const logElement = document.getElementById('debug-log');
+      if (logElement) {
+        logElement.textContent = message + '\n' + logElement.textContent;
+      }
+
+      const statusElement = document.getElementById('status-display');
+      if (statusElement) {
+        statusElement.textContent = message;
+      }
+    },
+
+    // Update model URL in debug panel
+    updateModelUrl: function(url) {
+      if (!DEBUG_ENABLED) return;
+
+      const element = document.getElementById('model-url-display');
+      if (element) {
+        element.textContent = url || 'none';
+      }
+    },
+
+    // Update proxy URL in debug panel
+    updateProxyUrl: function(url) {
+      if (!DEBUG_ENABLED) return;
+
+      const element = document.getElementById('proxy-url-display');
+      if (element) {
+        element.textContent = url || 'none';
+      }
+    }
+  };
+
+  function toggleSharePanel() {
+    const panel = document.querySelector('.share-panel');
+    panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const modelViewer = document.getElementById('brain-model');
+    const loading = document.getElementById('loading');
+    const modelContainer = document.getElementById('model-container');
+    const controlsHint = document.querySelector('.controls-hint');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelUrl = urlParams.get('model');
+
+    // Update debug info
+    DebugModule.updateModelUrl(modelUrl);
+
+    if (modelUrl) {
+      // Show loading indicator
+      loading.style.display = 'block';
+
+      // Try different proxies
+      const proxies = [
+        {
+          name: "mycustomproxy",
+          url: `https://dry-union-af0e.ivopresa.workers.dev/?url=${encodeURIComponent(modelUrl)}`
+        },
+        {
+          name: "allorigins",
+          url: `https://api.allorigins.win/raw?url=${encodeURIComponent(modelUrl)}`
+        },
+        {
+          name: "corsproxy.io",
+          url: `https://corsproxy.io/?${encodeURIComponent(modelUrl)}`
+        },
+        {
+          name: "cors.bridged.cc",
+          url: `https://cors.bridged.cc/${modelUrl}`
         }
-        
-        function toggleDebugPanel() {
-            const panel = document.getElementById('debug-panel');
-            panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
+      ];
+
+      // Try the first proxy
+      tryLoadModel(proxies, 0);
+
+      function tryLoadModel(proxyList, index) {
+        if (index >= proxyList.length) {
+          // All proxies failed
+          showFailureMessage();
+          return;
         }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const modelViewer = document.getElementById('brain-model');
-            const loading = document.getElementById('loading');
-            const modelContainer = document.getElementById('model-container');
-            const controlsHint = document.querySelector('.controls-hint');
-            
-            // Parse URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const modelUrl = urlParams.get('model');
-            
-            // Update debug panel
-            document.getElementById('model-url-display').textContent = modelUrl || 'none';
-            
-            if (modelUrl) {
-                // Show loading indicator
-                loading.style.display = 'block';
-                
-                // Try different proxies
-                const proxies = [
-                    {
-                        name: "num1",
-                        url: `https://dry-union-af0e.ivopresa.workers.dev/?url=${encodeURIComponent(modelUrl)}`
-                    },
-                    {
-                        name: "allorigins",
-                        url: `https://api.allorigins.win/raw?url=${encodeURIComponent(modelUrl)}`
-                    },
-                    {
-                        name: "corsproxy.io",
-                        url: `https://corsproxy.io/?${encodeURIComponent(modelUrl)}`
-                    },
-                    {
-                        name: "cors.bridged.cc",
-                        url: `https://cors.bridged.cc/${modelUrl}`
-                    }
-                ];
-                
-                // Try the first proxy
-                tryLoadModel(proxies, 0);
-                
-                function tryLoadModel(proxyList, index) {
-                    if (index >= proxyList.length) {
-                        // All proxies failed
-                        showFailureMessage();
-                        return;
-                    }
-                    
-                    const proxy = proxyList[index];
-                    log(`Trying proxy: ${proxy.name}`);
-                    document.getElementById('proxy-url-display').textContent = proxy.url;
-                    
-                    modelViewer.src = proxy.url;
-                    
-                    // Listen for successful load
-                    modelViewer.addEventListener('load', function loadHandler() {
-                        log(`Model loaded successfully with ${proxy.name}`);
-                        loading.style.display = 'none';
-                        controlsHint.style.display = 'block';
-                        
-                        // Position camera for a good default view
-                        setTimeout(() => {
-                            try {
-                                modelViewer.cameraOrbit = '0deg 75deg 2m';
-                                modelViewer.fieldOfView = '30deg';
-                                log("Camera positioned");
-                            } catch (e) {
-                                log("Error positioning camera: " + e.message);
-                            }
-                        }, 500);
-                        
-                        // Remove this event listener to avoid duplicates
-                        modelViewer.removeEventListener('load', loadHandler);
-                    }, { once: true });
-                    
-                    // Listen for errors
-                    modelViewer.addEventListener('error', function errorHandler() {
-                        log(`Error with proxy ${proxy.name}, trying next`);
-                        
-                        // Try the next proxy
-                        modelViewer.removeEventListener('error', errorHandler);
-                        tryLoadModel(proxyList, index + 1);
-                    }, { once: true });
-                }
-                
-                function showFailureMessage() {
-                    loading.style.display = 'none';
-                    
-                    log("All proxies failed");
-                    
-                    // Show error message with direct link option
-                    const errorElement = document.createElement('div');
-                    errorElement.className = 'error-message';
-                    errorElement.innerHTML = `
+
+        const proxy = proxyList[index];
+        DebugModule.log(`Trying proxy: ${proxy.name}`);
+        DebugModule.updateProxyUrl(proxy.url);
+
+        modelViewer.src = proxy.url;
+
+        modelViewer.addEventListener('load', function loadHandler() {
+          DebugModule.log(`Model loaded successfully with ${proxy.name}`);
+          loading.style.display = 'none';
+          controlsHint.style.display = 'block';
+
+          // Position camera for a good default view
+          setTimeout(() => {
+            try {
+              modelViewer.cameraOrbit = '0deg 75deg 2m';
+              modelViewer.fieldOfView = '30deg';
+              DebugModule.log("Camera positioned");
+            } catch (e) {
+              DebugModule.log("Error positioning camera: " + e.message);
+            }
+          }, 500);
+
+          modelViewer.removeEventListener('load', loadHandler);
+        }, { once: true });
+
+        // Listen for errors
+        modelViewer.addEventListener('error', function errorHandler() {
+          DebugModule.log(`Error with proxy ${proxy.name}, trying next`);
+
+          // Try the next proxy
+          modelViewer.removeEventListener('error', errorHandler);
+          tryLoadModel(proxyList, index + 1);
+        }, { once: true });
+      }
+
+      function showFailureMessage() {
+        loading.style.display = 'none';
+
+        DebugModule.log("All proxies failed");
+
+        // Show error message with direct link option
+        const errorElement = document.createElement('div');
+        errorElement.className = 'error-message';
+        errorElement.innerHTML = `
                         <h2>Error Loading Model</h2>
                         <p>There was a problem loading the 3D model using our proxy services.</p>
+                        <p>There is a chance the 3D model is not available anymore.</p>
                         <p>You can try <a href="${modelUrl}" target="_blank">downloading the model file directly</a> and viewing it with a local 3D viewer.</p>
                     `;
-                    
-                    modelContainer.appendChild(errorElement);
-                }
-            } else {
-                // No model URL provided
-                loading.style.display = 'none';
-                log("No model URL provided");
-                
-                // Show error message
-                const errorElement = document.createElement('div');
-                errorElement.className = 'error-message';
-                errorElement.innerHTML = `
+
+        modelContainer.appendChild(errorElement);
+      }
+    } else {
+      // No model URL provided
+      loading.style.display = 'none';
+      DebugModule.log("No model URL provided");
+
+      // Show error message
+      const errorElement = document.createElement('div');
+      errorElement.className = 'error-message';
+      errorElement.innerHTML = `
                     <h2>No Model Specified</h2>
                     <p>No 3D model URL was provided. Please include a model parameter in the URL.</p>
                     <p>Example: <code>${window.location.href}?model=https://example.com/model.glb</code></p>
                 `;
-                
-                modelContainer.appendChild(errorElement);
-            }
-        });
-    </script>
+
+      modelContainer.appendChild(errorElement);
+    }
+
+    // Share functionality
+    const shareUrlInput = document.getElementById('share-url');
+    const copyButton = document.getElementById('copy-btn');
+    const copyMessage = document.getElementById('copy-message');
+    const emailShare = document.getElementById('email-share');
+    const twitterShare = document.getElementById('twitter-share');
+
+    // Set the current URL in the input field
+    shareUrlInput.value = window.location.href;
+
+    // Copy to clipboard functionality
+    copyButton.addEventListener('click', function() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        // Modern browsers
+        navigator.clipboard.writeText(shareUrlInput.value)
+          .then(() => {
+            // Success - show the message
+            copyMessage.style.display = 'block';
+            setTimeout(() => {
+              copyMessage.style.display = 'none';
+            }, 2000);
+          })
+          .catch(err => {
+            // Handle errors, such as when permission is denied
+            console.error('Could not copy text: ', err);
+            alert('Unable to copy to clipboard. Please copy the URL manually.');
+          });
+      } else {
+        // Fallback for older browsers
+        shareUrlInput.select();
+        try {
+          const successful = document.execCommand('copy');
+          if (successful) {
+            copyMessage.style.display = 'block';
+            setTimeout(() => {
+              copyMessage.style.display = 'none';
+            }, 2000);
+          } else {
+            alert('Unable to copy to clipboard. Please copy the URL manually.');
+          }
+        } catch (err) {
+          console.error('Could not copy text: ', err);
+          alert('Unable to copy to clipboard. Please copy the URL manually.');
+        }
+      }
+    });
+
+    // Setup sharing links
+    const pageTitle = encodeURIComponent(document.title);
+    const pageUrl = encodeURIComponent(window.location.href);
+
+    emailShare.href = `mailto:?subject=${pageTitle}&body=Check%20out%20this%203D%20brain%20visualization:%20${pageUrl}`;
+    twitterShare.href = `https://twitter.com/intent/tweet?text=${pageTitle}&url=${pageUrl}`;
+
+    // Update share URL if model URL changes
+    if (modelViewer) {
+      modelViewer.addEventListener('load', function() {
+        // Update the share URL with the current URL
+        shareUrlInput.value = window.location.href;
+
+        // Update sharing links too
+        const updatedPageUrl = encodeURIComponent(window.location.href);
+        emailShare.href = `mailto:?subject=${pageTitle}&body=Check%20out%20this%203D%20brain%20visualization:%20${updatedPageUrl}`;
+        twitterShare.href = `https://twitter.com/intent/tweet?text=${pageTitle}&url=${updatedPageUrl}`;
+      });
+    }
+
+    // Initialize debug module
+    DebugModule.init();
+  });
+</script>
 </body>
 </html>
