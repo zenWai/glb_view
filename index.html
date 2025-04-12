@@ -176,11 +176,11 @@
             left: 10px;
             top: 60px;
             width: auto;
-            max-width: 230px;
+            max-width: 180px;
             max-height: 60vh;
             overflow-y: auto;
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 12px;
+            padding: 8px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 100;
@@ -208,7 +208,7 @@
         .region-control {
             display: flex;
             flex-direction: column;
-            padding: 8px 0;
+            padding: 4px 0;
             border-bottom: 1px solid #eee;
         }
 
@@ -223,10 +223,10 @@
         }
 
         .color-box {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 3px;
-            margin-right: 8px;
+            margin-right: 6px;
             border: 1px solid rgba(0,0,0,0.1);
             flex-shrink: 0;
         }
@@ -234,10 +234,11 @@
         .region-name {
             flex: 1;
             font-weight: 500;
-            font-size: 13px;
+            font-size: 12px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 110px;
         }
 
         .control-header {
@@ -249,21 +250,21 @@
         }
 
         .control-header h3 {
-            font-size: 16px;
-            margin: 0 0 8px 0;
+            font-size: 14px;
+            margin: 0 0 6px 0;
             text-align: center;
         }
 
         .control-actions {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .control-action {
-            padding: 4px 8px;
-            font-size: 12px;
+            padding: 3px 6px;
+            font-size: 11px;
             border-radius: 4px;
             cursor: pointer;
             border: none;
@@ -281,14 +282,14 @@
         }
 
         .region-button {
-            padding: 2px 6px;
-            font-size: 11px;
+            padding: 2px 4px;
+            font-size: 10px;
             border: 1px solid #ddd;
             background: #f8f8f8;
             border-radius: 3px;
             cursor: pointer;
             align-self: flex-start;
-            margin-left: 22px;
+            margin-left: 18px;
         }
 
         .region-button:hover {
@@ -326,25 +327,25 @@
             .brain-controls {
                 max-height: 50vh;
                 width: auto;
-                max-width: 170px;
+                max-width: 140px;
                 left: 10px;
                 top: 60px;
-                padding: 8px;
+                padding: 6px;
             }
 
             .control-action {
-                font-size: 11px;
-                padding: 3px 6px;
+                font-size: 10px;
+                padding: 2px 4px;
             }
 
             .region-name {
-                font-size: 12px;
-                max-width: 120px;
+                font-size: 11px;
+                max-width: 80px;
             }
 
             .region-button {
-                font-size: 10px;
-                padding: 1px 4px;
+                font-size: 9px;
+                padding: 1px 3px;
             }
         }
 
@@ -766,7 +767,7 @@
 
     toggleControlsBtn.style.display = 'flex';
     brainControls.style.display = 'block';
-      
+
     setTimeout(() => {
       brainControls.style.display = 'none';
     }, 3000);
@@ -989,11 +990,11 @@
           controlsHint.style.display = 'block';
 
           setTimeout(() => {
-              if (modelViewer.model && modelViewer.model.materials) {
-                createBrainLegend(modelViewer, brainControls, toggleControlsBtn);
-              } else {
-                DebugModule.log("Cannot create legend - materials not available");
-              }
+            if (modelViewer.model && modelViewer.model.materials) {
+              createBrainLegend(modelViewer, brainControls, toggleControlsBtn);
+            } else {
+              DebugModule.log("Cannot create legend - materials not available");
+            }
           }, 500);
 
           modelViewer.removeEventListener('load', loadHandler);
