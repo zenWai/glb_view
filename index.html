@@ -37,7 +37,7 @@
             color: var(--header-text);
             padding: 1rem;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
@@ -67,7 +67,7 @@
             background-color: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .action-buttons {
@@ -107,11 +107,11 @@
             text-align: center;
             color: var(--error-color);
             padding: 2rem;
-            background-color: rgba(255,255,255,0.9);
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
             max-width: 90%;
             margin: 2rem auto;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .loading {
@@ -121,7 +121,7 @@
             transform: translate(-50%, -50%);
             text-align: center;
             z-index: 10;
-            background-color: rgba(255,255,255,0.8);
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 8px;
         }
@@ -129,7 +129,7 @@
         .spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(0,0,0,0.1);
+            border: 4px solid rgba(0, 0, 0, 0.1);
             border-left-color: var(--header-bg);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -137,7 +137,7 @@
         }
 
         .controls-hint {
-            background-color: rgba(255,255,255,0.8);
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 0.5rem 1rem;
             border-radius: 4px;
             position: absolute;
@@ -147,7 +147,63 @@
             font-size: 0.8rem;
             text-align: center;
             display: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .touch-point {
+            display: none;
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            transform: translateX(-50%) translateY(-50%);
+            border-radius: 50%;
+            box-shadow: 0px 0px 12px 4px rgba(45, 115, 70, 0.7),
+            0px 0px 6px 2px rgba(45, 115, 70, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            background-color: rgba(45, 115, 70, 0.6);
+            z-index: 1000;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .touch-point::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+        }
+
+        .touch-point.animate {
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) translateY(-50%) scale(0.9);
+            }
+            100% {
+                transform: translateX(-50%) translateY(-50%) scale(1.1);
+            }
+        }
+
+        .mobile-hint {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            text-align: center;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 100;
         }
 
@@ -157,7 +213,7 @@
             text-align: center;
             font-size: 0.8rem;
             color: #666;
-            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .footer a {
@@ -182,7 +238,7 @@
             background-color: rgba(255, 255, 255, 0.9);
             padding: 8px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 100;
         }
 
@@ -196,12 +252,12 @@
         }
 
         .brain-controls::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.05);
+            background: rgba(0, 0, 0, 0.05);
             border-radius: 4px;
         }
 
         .brain-controls::-webkit-scrollbar-thumb {
-            background-color: rgba(0,0,0,0.2);
+            background-color: rgba(0, 0, 0, 0.2);
             border-radius: 4px;
         }
 
@@ -227,7 +283,7 @@
             height: 12px;
             border-radius: 3px;
             margin-right: 6px;
-            border: 1px solid rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             flex-shrink: 0;
         }
 
@@ -297,8 +353,12 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         @media (min-width: 768px) {
@@ -354,7 +414,7 @@
             border-radius: 8px;
             padding: 1rem;
             margin-top: 1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: none;
         }
 
@@ -446,16 +506,30 @@
             <p>Loading 3D model...</p>
         </div>
         <model-viewer id="brain-model"
-                      camera-controls tone-mapping="neutral" shadow-intensity="2" shadow-softness="0.50" loading="eager">
+                      camera-controls
+                      tone-mapping="neutral"
+                      shadow-intensity="2"
+                      shadow-softness="0.50"
+                      loading="eager"
+                      interaction-prompt="auto"
+                      interaction-prompt-style="wiggle">
+            <!-- Custom touch points for mobile -->
+            <div class="touch-point" slot="finger0"></div>
+            <div class="touch-point" slot="finger1"></div>
         </model-viewer>
 
         <div class="controls-hint">
             Click and drag to rotate | Scroll to zoom
         </div>
 
+        <div class="mobile-hint">
+            Use two fingers to rotate and pinch to zoom
+        </div>
+
         <div class="action-buttons">
             <button class="action-button" onclick="toggleSharePanel()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="18" cy="5" r="3"></circle>
                     <circle cx="6" cy="12" r="3"></circle>
                     <circle cx="18" cy="19" r="3"></circle>
@@ -472,7 +546,8 @@
         <div class="share-input-group">
             <input type="text" id="share-url" readonly>
             <button id="copy-btn" title="Copy to clipboard">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
                 </svg>
@@ -481,13 +556,15 @@
         <div id="copy-message">URL copied!</div>
         <div class="share-buttons">
             <a id="email-share" href="#" target="_blank" title="Share via Email">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                     <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
             </a>
             <a id="twitter-share" href="#" target="_blank" title="Share on Twitter">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
                 </svg>
             </a>
@@ -497,15 +574,125 @@
 </div>
 
 <div class="footer">
-    <p>Developed by <a href="https://github.com/zenWai" target="_blank">Fernando Presa</a> to support GLB files of 3D brain region heatmaps from the Custom Excel Processor app</p>
+    <p>Developed by <a href="https://github.com/zenWai" target="_blank">Fernando Presa</a> to support GLB files of 3D
+        brain region heatmaps from the Custom Excel Processor app</p>
 </div>
 
 <script>
   // Debug configuration
   const DEBUG_ENABLED = false;
 
+  // Mobile detection function
+  function isMobileDevice() {
+    return (window.innerWidth <= 768) ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
+  // Custom interaction prompt for mobile
+  const setupMobileInteractionPrompt = () => {
+    const modelViewer = document.getElementById('brain-model');
+    const touchPoints = document.querySelectorAll('.touch-point');
+    const mobileHint = document.querySelector('.mobile-hint');
+    const desktopHint = document.querySelector('.controls-hint');
+
+    const PROMPT_MS = 3000; // Duration of the prompt animation
+    const REPEAT_MS = 7000; // Time to wait before showing the prompt again
+
+    const finger0 = {
+      x: {
+        initialValue: 0.6,
+        keyframes: [
+          { frames: 1, value: 0.7 },
+          { frames: 1, value: 0.5 },
+          { frames: 1, value: 0.7 },
+          { frames: 1, value: 0.6 },
+        ]
+      },
+      y: {
+        initialValue: 0.45,
+        keyframes: [
+          { frames: 1, value: 0.4 },
+          { frames: 1, value: 0.3 },
+          { frames: 1, value: 0.4 },
+          { frames: 1, value: 0.45 },
+        ]
+      }
+    };
+
+    const finger1 = {
+      x: {
+        initialValue: 0.4,
+        keyframes: [
+          { frames: 1, value: 0.3 },
+          { frames: 1, value: 0.1 },
+          { frames: 1, value: 0.3 },
+          { frames: 1, value: 0.4 },
+        ]
+      },
+      y: {
+        initialValue: 0.55,
+        keyframes: [
+          { frames: 1, value: 0.6 },
+          { frames: 1, value: 0.5 },
+          { frames: 1, value: 0.6 },
+          { frames: 1, value: 0.55 },
+        ]
+      }
+    };
+
+    let hasInteracted = false;
+    
+    const showPrompt = () => {
+      if (!hasInteracted) {
+        // Make touch points visible
+        touchPoints.forEach(point => {
+          point.style.display = 'block';
+          point.classList.add('animate');
+        });
+        
+        mobileHint.style.display = 'block';
+        
+        modelViewer.interact(PROMPT_MS, finger0, finger1);
+        
+        setTimeout(() => {
+          touchPoints.forEach(point => {
+            point.classList.remove('animate');
+            point.style.display = 'none';
+          });
+          mobileHint.style.display = 'none';
+        }, PROMPT_MS);
+
+        // Schedule next prompt if user hasn't interacted
+        setTimeout(showPrompt, REPEAT_MS);
+      }
+    };
+    
+    const userInteracted = (event) => {
+      if (event.detail.source === 'user-interaction') {
+        hasInteracted = true;
+        
+        touchPoints.forEach(point => {
+          point.style.display = 'none';
+        });
+        mobileHint.style.display = 'none';
+        
+        modelViewer.removeEventListener('camera-change', userInteracted);
+      }
+    };
+
+    modelViewer.addEventListener('camera-change', userInteracted);
+    
+    modelViewer.addEventListener('poster-dismissed', () => {
+      if (isMobileDevice()) {
+        desktopHint.style.display = 'none';
+        
+        setTimeout(showPrompt, 1000);
+      }
+    }, { once: true });
+  };
+
   const DebugModule = {
-    init: function() {
+    init: function () {
       if (!DEBUG_ENABLED) return;
 
       console.log("Debug module initializing...");
@@ -517,7 +704,7 @@
       console.log("Debug module initialized");
     },
 
-    injectDebugButton: function() {
+    injectDebugButton: function () {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => this._createDebugButton());
       } else {
@@ -525,7 +712,7 @@
       }
     },
 
-    _createDebugButton: function() {
+    _createDebugButton: function () {
       const actionButtons = document.querySelector('.action-buttons');
 
       if (!actionButtons) {
@@ -539,7 +726,9 @@
 
       const debugButton = document.createElement('button');
       debugButton.className = 'action-button';
-      debugButton.onclick = function() { self.toggleDebugPanel(); };
+      debugButton.onclick = function () {
+        self.toggleDebugPanel();
+      };
       debugButton.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
@@ -554,7 +743,7 @@
       console.log("Debug button created and injected");
     },
 
-    injectDebugPanel: function() {
+    injectDebugPanel: function () {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => this._createDebugPanel());
       } else {
@@ -562,7 +751,7 @@
       }
     },
 
-    _createDebugPanel: function() {
+    _createDebugPanel: function () {
       const container = document.querySelector('.container');
 
       if (!container) {
@@ -595,7 +784,7 @@
       console.log("Debug panel created and injected");
     },
 
-    toggleDebugPanel: function() {
+    toggleDebugPanel: function () {
       console.log("Toggle debug panel called");
       const panel = document.getElementById('debug-panel');
       if (!panel) {
@@ -607,7 +796,7 @@
       console.log("Debug panel visibility: " + panel.style.display);
     },
 
-    log: function(message) {
+    log: function (message) {
       if (!DEBUG_ENABLED) return;
 
       console.log(message);
@@ -623,7 +812,7 @@
       }
     },
 
-    updateModelUrl: function(url) {
+    updateModelUrl: function (url) {
       if (!DEBUG_ENABLED) return;
 
       const element = document.getElementById('model-url-display');
@@ -632,7 +821,7 @@
       }
     },
 
-    updateProxyUrl: function(url) {
+    updateProxyUrl: function (url) {
       if (!DEBUG_ENABLED) return;
 
       const element = document.getElementById('proxy-url-display');
@@ -679,7 +868,7 @@
         Legend
     `;
     toggleControlsBtn.style.display = 'none';
-    toggleControlsBtn.onclick = function() {
+    toggleControlsBtn.onclick = function () {
       brainControls.style.display = brainControls.style.display === 'none' ? 'block' : 'none';
     };
     actionButtons.appendChild(toggleControlsBtn);
@@ -932,11 +1121,21 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const modelViewer = document.getElementById('brain-model');
     const loading = document.getElementById('loading');
     const modelContainer = document.getElementById('model-container');
     const controlsHint = document.querySelector('.controls-hint');
+    const mobileHint = document.querySelector('.mobile-hint');
+
+    if (isMobileDevice()) {
+      controlsHint.style.display = 'none';
+    } else {
+      mobileHint.style.display = 'none';
+      controlsHint.style.display = 'block';
+    }
+
+    setupMobileInteractionPrompt();
 
     const { brainControls, toggleControlsBtn } = setupBrainControls();
 
@@ -987,7 +1186,10 @@
         modelViewer.addEventListener('load', function loadHandler() {
           DebugModule.log(`Model loaded successfully with ${proxy.name}`);
           loading.style.display = 'none';
-          controlsHint.style.display = 'block';
+
+          if (!isMobileDevice()) {
+            controlsHint.style.display = 'block';
+          }
 
           setTimeout(() => {
             if (modelViewer.model && modelViewer.model.materials) {
@@ -1055,7 +1257,7 @@
     shareUrlInput.value = window.location.href;
 
     // Copy to clipboard functionality
-    copyButton.addEventListener('click', function() {
+    copyButton.addEventListener('click', function () {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         // Modern browsers
         navigator.clipboard.writeText(shareUrlInput.value)
@@ -1100,7 +1302,7 @@
 
     // Update share URL if model URL changes
     if (modelViewer) {
-      modelViewer.addEventListener('load', function() {
+      modelViewer.addEventListener('load', function () {
         // Update the share URL with the current URL
         shareUrlInput.value = window.location.href;
 
