@@ -988,21 +988,12 @@
           loading.style.display = 'none';
           controlsHint.style.display = 'block';
 
-          // Position camera for a good default view
           setTimeout(() => {
-            try {
-              modelViewer.cameraOrbit = '0deg 75deg 2m';
-              modelViewer.fieldOfView = '30deg';
-              DebugModule.log("Camera positioned");
-
-                  if (modelViewer.model && modelViewer.model.materials) {
+              if (modelViewer.model && modelViewer.model.materials) {
                 createBrainLegend(modelViewer, brainControls, toggleControlsBtn);
               } else {
                 DebugModule.log("Cannot create legend - materials not available");
               }
-            } catch (e) {
-              DebugModule.log("Error positioning camera: " + e.message);
-            }
           }, 500);
 
           modelViewer.removeEventListener('load', loadHandler);
