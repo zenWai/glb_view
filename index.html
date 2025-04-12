@@ -13,6 +13,7 @@
             --main-bg: #f5f5f5;
             --error-color: #cc0000;
             --link-color: #1a73e8;
+            --highlight-color: #ff0000;
         }
 
         * {
@@ -168,6 +169,132 @@
             text-decoration: underline;
         }
 
+        .brain-controls {
+            transition: opacity 0.3s;
+            font-size: 14px;
+            position: absolute;
+            left: 10px;
+            top: 60px;
+            width: auto;
+            max-width: 230px;
+            max-height: 60vh;
+            overflow-y: auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .brain-controls button:hover {
+            filter: brightness(1.1);
+        }
+
+        /* Custom scrollbar */
+        .brain-controls::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .brain-controls::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+
+        .brain-controls::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+
+        .region-control {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .region-control:last-child {
+            border-bottom: none;
+        }
+
+        .region-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .color-box {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            margin-right: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        .region-name {
+            flex: 1;
+            font-weight: 500;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .control-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .control-header h3 {
+            font-size: 16px;
+            margin: 0 0 8px 0;
+            text-align: center;
+        }
+
+        .control-actions {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-action {
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .show-all {
+            background-color: var(--header-bg);
+            color: white;
+        }
+
+        .transparent-all {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+
+        .region-button {
+            padding: 2px 6px;
+            font-size: 11px;
+            border: 1px solid #ddd;
+            background: #f8f8f8;
+            border-radius: 3px;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-left: 22px;
+        }
+
+        .region-button:hover {
+            background: #f0f0f0;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -192,6 +319,32 @@
 
             .controls-hint {
                 display: block;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .brain-controls {
+                max-height: 50vh;
+                width: auto;
+                max-width: 170px;
+                left: 10px;
+                top: 60px;
+                padding: 8px;
+            }
+
+            .control-action {
+                font-size: 11px;
+                padding: 3px 6px;
+            }
+
+            .region-name {
+                font-size: 12px;
+                max-width: 120px;
+            }
+
+            .region-button {
+                font-size: 10px;
+                padding: 1px 4px;
             }
         }
 
@@ -277,7 +430,6 @@
         #twitter-share:hover {
             color: #1DA1F2;
         }
-
     </style>
 </head>
 <body>
@@ -344,7 +496,7 @@
 </div>
 
 <div class="footer">
-    <p>Developed by <a href="https://github.com/zenWai" target="_blank">Fernando Presa</a> to support GLB files of 3D brain region heatmaps from the Custom Excel Processor app | Powered by <a href="https://modelviewer.dev/" target="_blank">Model Viewer</a></p>
+    <p>Developed by <a href="https://github.com/zenWai" target="_blank">Fernando Presa</a> to support GLB files of 3D brain region heatmaps from the Custom Excel Processor app</p>
 </div>
 
 <script>
@@ -365,7 +517,6 @@
     },
 
     injectDebugButton: function() {
-      // Wait for DOM to be fully loaded
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => this._createDebugButton());
       } else {
@@ -387,7 +538,6 @@
 
       const debugButton = document.createElement('button');
       debugButton.className = 'action-button';
-      // We need to use the stored reference to ensure correct context
       debugButton.onclick = function() { self.toggleDebugPanel(); };
       debugButton.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -404,7 +554,6 @@
     },
 
     injectDebugPanel: function() {
-      // Wait for DOM to be fully loaded
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => this._createDebugPanel());
       } else {
@@ -441,12 +590,10 @@
                     <pre id="debug-log" style="background-color: #eee; padding: 5px; overflow: auto; max-height: 100px;"></pre>
                 `;
 
-      // Insert at the end of container
       container.appendChild(debugPanel);
       console.log("Debug panel created and injected");
     },
 
-    // Toggle debug panel visibility
     toggleDebugPanel: function() {
       console.log("Toggle debug panel called");
       const panel = document.getElementById('debug-panel');
@@ -459,7 +606,6 @@
       console.log("Debug panel visibility: " + panel.style.display);
     },
 
-    // Log message to debug console and UI if enabled
     log: function(message) {
       if (!DEBUG_ENABLED) return;
 
@@ -476,7 +622,6 @@
       }
     },
 
-    // Update model URL in debug panel
     updateModelUrl: function(url) {
       if (!DEBUG_ENABLED) return;
 
@@ -486,7 +631,6 @@
       }
     },
 
-    // Update proxy URL in debug panel
     updateProxyUrl: function(url) {
       if (!DEBUG_ENABLED) return;
 
@@ -497,9 +641,294 @@
     }
   };
 
+  // Storage for material data
+  let materialMap = new Map();
+  let originalStates = new Map();
+  let originalColors = new Map();
+  let isBlinking = false;
+
   function toggleSharePanel() {
     const panel = document.querySelector('.share-panel');
     panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
+  }
+
+  function getColorForMaterial(material, index) {
+    if (material.pbrMetallicRoughness && material.pbrMetallicRoughness.baseColorFactor) {
+      const color = material.pbrMetallicRoughness.baseColorFactor;
+      return `rgba(${Math.round(color[0] * 255)}, ${Math.round(color[1] * 255)}, ${Math.round(color[2] * 255)}, ${color[3]})`;
+    }
+    return 'rgba(150, 150, 150, 1.0)';
+  }
+
+  function setupBrainControls() {
+    const modelContainer = document.getElementById('model-container');
+    const actionButtons = document.querySelector('.action-buttons');
+
+    const brainControls = document.createElement('div');
+    brainControls.className = 'brain-controls';
+    brainControls.style.display = 'none';
+    modelContainer.appendChild(brainControls);
+
+    const toggleControlsBtn = document.createElement('button');
+    toggleControlsBtn.className = 'action-button';
+    toggleControlsBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+        </svg>
+        Legend
+    `;
+    toggleControlsBtn.style.display = 'none';
+    toggleControlsBtn.onclick = function() {
+      brainControls.style.display = brainControls.style.display === 'none' ? 'block' : 'none';
+    };
+    actionButtons.appendChild(toggleControlsBtn);
+
+    return { brainControls, toggleControlsBtn };
+  }
+
+  function createBrainLegend(modelViewer, brainControls, toggleControlsBtn) {
+    DebugModule.log('Creating brain legend');
+
+    brainControls.innerHTML = '';
+
+    const header = document.createElement('div');
+    header.className = 'control-header';
+
+    const title = document.createElement('h3');
+    title.textContent = 'Brain Regions';
+    header.appendChild(title);
+
+    const actionButtons = document.createElement('div');
+    actionButtons.className = 'control-actions';
+
+    const showAllBtn = document.createElement('button');
+    showAllBtn.textContent = 'Reset';
+    showAllBtn.className = 'control-action show-all';
+    showAllBtn.onclick = showAllRegions;
+
+    const transparentAllBtn = document.createElement('button');
+    transparentAllBtn.textContent = 'See-through regions';
+    transparentAllBtn.className = 'control-action transparent-all';
+    transparentAllBtn.onclick = makeAllRegionsTransparent;
+
+    actionButtons.appendChild(showAllBtn);
+    actionButtons.appendChild(transparentAllBtn);
+
+    header.appendChild(actionButtons);
+    brainControls.appendChild(header);
+
+    const materials = modelViewer.model.materials;
+    const brainRegions = materials.filter(m => m.name && m.name !== 'root');
+    DebugModule.log(`Adding ${brainRegions.length} regions to legend`);
+
+    // Create a control for each brain region
+    brainRegions.forEach((material, index) => {
+      const control = document.createElement('div');
+      control.className = 'region-control';
+
+      // Create region header (color box + name)
+      const regionHeader = document.createElement('div');
+      regionHeader.className = 'region-header';
+
+      const colorBox = document.createElement('div');
+      colorBox.className = 'color-box';
+      colorBox.style.backgroundColor = getColorForMaterial(material, index);
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'region-name';
+      nameSpan.textContent = material.name;
+
+      regionHeader.appendChild(colorBox);
+      regionHeader.appendChild(nameSpan);
+
+      const highlightBtn = document.createElement('button');
+      highlightBtn.textContent = 'Highlight';
+      highlightBtn.className = 'region-button';
+      highlightBtn.onclick = () => highlightRegionWithBlink(material.name, modelViewer);
+
+      control.appendChild(regionHeader);
+      control.appendChild(highlightBtn);
+
+      brainControls.appendChild(control);
+
+      materialMap.set(material.name, material);
+
+      originalStates.set(material.name, {
+        alpha: material.alpha,
+        alphaMode: material.alphaMode,
+        alphaCutoff: material.alphaCutoff
+      });
+
+      if (material.pbrMetallicRoughness && material.pbrMetallicRoughness.baseColorFactor) {
+        originalColors.set(material.name, [...material.pbrMetallicRoughness.baseColorFactor]);
+      }
+    });
+
+    toggleControlsBtn.style.display = 'flex';
+    brainControls.style.display = 'block';
+      
+    setTimeout(() => {
+      brainControls.style.display = 'none';
+    }, 3000);
+  }
+
+  function highlightRegionWithBlink(regionName, modelViewer) {
+    DebugModule.log(`Highlighting region with color blink effect: ${regionName}`);
+
+    // If already blinking, do nothing
+    if (isBlinking) {
+      DebugModule.log('Already highlighting a region, ignoring request');
+      return;
+    }
+
+    isBlinking = true;
+
+    const material = materialMap.get(regionName);
+    if (!material) {
+      DebugModule.log('Material not found');
+      isBlinking = false;
+      return;
+    }
+
+    DebugModule.log(`Material found: ${material.name}`);
+
+    // Ensure we have stored the original color
+    if (!originalColors.has(regionName)) {
+      if (material.pbrMetallicRoughness.baseColorFactor) {
+        originalColors.set(regionName, [...material.pbrMetallicRoughness.baseColorFactor]);
+      } else {
+        DebugModule.log('Could not determine original color');
+        isBlinking = false;
+        return;
+      }
+    }
+
+    // Get the original color
+    const originalColor = originalColors.get(regionName);
+    DebugModule.log(`Original color: ${JSON.stringify(originalColor)}`);
+
+    // Make all other regions semi-transparent
+    materialMap.forEach((mat, name) => {
+      if (name !== regionName) {
+        mat.setAlphaMode('BLEND');
+        mat.alpha = 0.3;
+      }
+    });
+
+    // Make the selected region opaque
+    material.setAlphaMode('OPAQUE');
+    material.alpha = 1.0;
+
+    // Create a blinking effect by alternating between original color and red
+    const RED_COLOR = [1.0, 0.0, 0.0, originalColor[3]];
+    const pulseCount = 5;
+    const pulseDuration = 300;
+
+    // Variables to track the blinking state
+    let currentPulse = 0;
+    let isRed = false;
+
+    DebugModule.log('Starting color blink animation');
+
+    const modelContainer = document.getElementById('model-container');
+    const indicator = document.createElement('div');
+    indicator.style.position = 'absolute';
+    indicator.style.top = '60px';
+    indicator.style.left = '50%';
+    indicator.style.transform = 'translateX(-50%)';
+    indicator.style.backgroundColor = 'rgba(255, 0, 0, 0.7)';
+    indicator.style.color = 'white';
+    indicator.style.padding = '5px 10px';
+    indicator.style.borderRadius = '4px';
+    indicator.style.fontWeight = 'bold';
+    indicator.style.zIndex = '1000';
+    indicator.style.boxShadow = '0 0 10px rgba(255, 0, 0, 0.7)';
+    indicator.style.transition = 'all 0.2s ease-in-out';
+    indicator.textContent = `Highlighting: ${regionName}`;
+
+    modelContainer.appendChild(indicator);
+
+    material.pbrMetallicRoughness.setBaseColorFactor(RED_COLOR);
+    isRed = true;
+
+    const pulseInterval = setInterval(() => {
+      DebugModule.log(`Pulse iteration: ${currentPulse}, isRed: ${isRed}`);
+
+      if (isRed) {
+        // Switch to original color
+        material.pbrMetallicRoughness.setBaseColorFactor(originalColor);
+        indicator.style.backgroundColor = 'rgba(255, 0, 0, 0.5)';
+        indicator.style.boxShadow = '0 0 5px rgba(255, 0, 0, 0.5)';
+        isRed = false;
+      } else {
+        // Switch to red color
+        material.pbrMetallicRoughness.setBaseColorFactor(RED_COLOR);
+        indicator.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
+        indicator.style.boxShadow = '0 0 15px rgba(255, 0, 0, 0.8)';
+        isRed = true;
+        currentPulse++;
+      }
+
+      if (currentPulse >= pulseCount) {
+        DebugModule.log('Pulsing complete, clearing interval');
+        clearInterval(pulseInterval);
+
+        material.pbrMetallicRoughness.setBaseColorFactor(originalColor);
+
+        // Return all regions to their original state after pulsing
+        setTimeout(() => {
+          DebugModule.log('Restoring all regions to original state');
+          showAllRegions();
+          isBlinking = false;
+        }, 300);
+        modelContainer.removeChild(indicator);
+
+        DebugModule.log('Restored original color for ' + regionName);
+      }
+    }, pulseDuration);
+  }
+
+  // Reset functionality
+  function showAllRegions() {
+    DebugModule.log('Showing all regions with original colors');
+
+    try {
+      // Reset all materials to original state
+      materialMap.forEach((material, name) => {
+        const originalState = originalStates.get(name);
+        if (originalState) {
+          material.setAlphaMode(originalState.alphaMode);
+          material.alpha = originalState.alpha;
+          if (originalState.alphaCutoff !== undefined) {
+            material.alphaCutoff = originalState.alphaCutoff;
+          }
+        }
+
+        const originalColor = originalColors.get(name);
+        if (originalColor && material.pbrMetallicRoughness) {
+          material.pbrMetallicRoughness.setBaseColorFactor(originalColor);
+          DebugModule.log(`Reset color for ${name} to ${JSON.stringify(originalColor)}`);
+        }
+      });
+
+    } catch (e) {
+      DebugModule.log(`Error showing all regions: ${e.message}`);
+    }
+  }
+
+  // See-through functionality
+  function makeAllRegionsTransparent() {
+    DebugModule.log('Making all regions transparent');
+
+    try {
+      materialMap.forEach(material => {
+        material.setAlphaMode('BLEND');
+        material.alpha = 0.5;
+      });
+
+    } catch (e) {
+      DebugModule.log(`Error making regions transparent: ${e.message}`);
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -508,10 +937,11 @@
     const modelContainer = document.getElementById('model-container');
     const controlsHint = document.querySelector('.controls-hint');
 
+    const { brainControls, toggleControlsBtn } = setupBrainControls();
+
     const urlParams = new URLSearchParams(window.location.search);
     const modelUrl = urlParams.get('model');
 
-    // Update debug info
     DebugModule.updateModelUrl(modelUrl);
 
     if (modelUrl) {
@@ -538,7 +968,6 @@
         }
       ];
 
-      // Try the first proxy
       tryLoadModel(proxies, 0);
 
       function tryLoadModel(proxyList, index) {
@@ -565,6 +994,12 @@
               modelViewer.cameraOrbit = '0deg 75deg 2m';
               modelViewer.fieldOfView = '30deg';
               DebugModule.log("Camera positioned");
+
+                  if (modelViewer.model && modelViewer.model.materials) {
+                createBrainLegend(modelViewer, brainControls, toggleControlsBtn);
+              } else {
+                DebugModule.log("Cannot create legend - materials not available");
+              }
             } catch (e) {
               DebugModule.log("Error positioning camera: " + e.message);
             }
