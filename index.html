@@ -997,18 +997,6 @@
     const originalColor = originalColors.get(regionName);
     DebugModule.log(`Original color: ${JSON.stringify(originalColor)}`);
 
-    // Make all other regions semi-transparent
-    materialMap.forEach((mat, name) => {
-      if (name !== regionName) {
-        mat.setAlphaMode('BLEND');
-        mat.alpha = 0.3;
-      }
-    });
-
-    // Make the selected region opaque
-    material.setAlphaMode('OPAQUE');
-    material.alpha = 1.0;
-
     // Create a blinking effect by alternating between original color and red
     const RED_COLOR = [1.0, 0.0, 0.0, originalColor[3]];
     const pulseCount = 5;
@@ -1064,13 +1052,7 @@
         clearInterval(pulseInterval);
 
         material.pbrMetallicRoughness.setBaseColorFactor(originalColor);
-
-        // Return all regions to their original state after pulsing
-        setTimeout(() => {
-          DebugModule.log('Restoring all regions to original state');
-          showAllRegions();
-          isBlinking = false;
-        }, 300);
+        isBlinking = false;
         modelContainer.removeChild(indicator);
 
         DebugModule.log('Restored original color for ' + regionName);
