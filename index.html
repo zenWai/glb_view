@@ -841,14 +841,22 @@
     const panel = document.querySelector('.share-panel');
     panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
   }
-
-  function getColorForMaterial(material, index) {
-    if (material.pbrMetallicRoughness && material.pbrMetallicRoughness.baseColorFactor) {
-      const color = material.pbrMetallicRoughness.baseColorFactor;
-      return `rgba(${Math.round(color[0] * 255)}, ${Math.round(color[1] * 255)}, ${Math.round(color[2] * 255)}, ${color[3]})`;
+    // Test with linear-to-sRGB conversion
+    function getColorForMaterial(material, index) {
+      if (material.pbrMetallicRoughness && material.pbrMetallicRoughness.baseColorFactor) {
+        const color = material.pbrMetallicRoughness.baseColorFactor;
+        
+        
+        const linearToSRGB = (x) => x <= 0.0031308 ? x * 12.92 : 1.055 * Math.pow(x, 1/2.4) - 0.055;
+        
+        const r = linearToSRGB(color[0]);
+        const g = linearToSRGB(color[1]);
+        const b = linearToSRGB(color[2]);
+        
+        return `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${color[3]})`;
+      }
+      return 'rgba(150, 150, 150, 1.0)';
     }
-    return 'rgba(150, 150, 150, 1.0)';
-  }
 
   function setupBrainControls() {
     const modelContainer = document.getElementById('model-container');
