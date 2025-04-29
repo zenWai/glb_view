@@ -1022,13 +1022,13 @@
     indicator.style.top = '60px';
     indicator.style.left = '50%';
     indicator.style.transform = 'translateX(-50%)';
-    indicator.style.backgroundColor = 'rgba(255, 0, 0, 0.7)';
+    indicator.style.backgroundColor = 'rgba(45, 115, 70, 0.7)';
     indicator.style.color = 'white';
     indicator.style.padding = '5px 10px';
     indicator.style.borderRadius = '4px';
     indicator.style.fontWeight = 'bold';
     indicator.style.zIndex = '1000';
-    indicator.style.boxShadow = '0 0 10px rgba(255, 0, 0, 0.7)';
+    indicator.style.boxShadow = '0 0 10px rgba(45, 115, 70, 0.7)';
     indicator.style.transition = 'all 0.2s ease-in-out';
     indicator.textContent = `Highlighting: ${regionName}`;
 
@@ -1043,14 +1043,14 @@
       if (isRed) {
         // Switch to original color
         material.pbrMetallicRoughness.setBaseColorFactor(originalColor);
-        indicator.style.backgroundColor = 'rgba(255, 0, 0, 0.5)';
-        indicator.style.boxShadow = '0 0 5px rgba(255, 0, 0, 0.5)';
+        indicator.style.backgroundColor = 'rgba(45, 115, 70, 0.5)';
+        indicator.style.boxShadow = '0 0 5px rgba(45, 115, 70, 0.5)';
         isRed = false;
       } else {
         // Switch to red color
         material.pbrMetallicRoughness.setBaseColorFactor(RED_COLOR);
-        indicator.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
-        indicator.style.boxShadow = '0 0 15px rgba(255, 0, 0, 0.8)';
+        indicator.style.backgroundColor = 'rgba(45, 115, 70, 0.8)';
+        indicator.style.boxShadow = '0 0 15px rgba(45, 115, 70, 0.8)';
         isRed = true;
         currentPulse++;
       }
