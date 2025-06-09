@@ -928,11 +928,9 @@ function createBrainLegend(modelViewer, brainControls, toggleControlsBtn) {
 
     const materials = modelViewer.model.materials;
     
-    // MODIFIED: Extract regions with values and sort them
     const brainRegions = materials
-        .filter(m => m.name && m.name !== 'root')
+        .filter(m => m.name)
         .map(material => {
-            // Parse the name and value
             const parts = material.name.split('|');
             const name = parts[0];
             const value = parts.length > 1 ? parseFloat(parts[1]) : 0;
@@ -943,7 +941,7 @@ function createBrainLegend(modelViewer, brainControls, toggleControlsBtn) {
                 value: value
             };
         })
-        // Sort by value in descending order (highest values first)
+        .filter(region => region.name !== 'root')
         .sort((a, b) => b.value - a.value);
 
     DebugModule.log(`Adding ${brainRegions.length} regions to legend (sorted by value)`);
