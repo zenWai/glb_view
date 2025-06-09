@@ -895,7 +895,7 @@
     return { brainControls, toggleControlsBtn };
   }
 
-  function createBrainLegend(modelViewer, brainControls, toggleControlsBtn) {
+function createBrainLegend(modelViewer, brainControls, toggleControlsBtn) {
     DebugModule.log('Creating brain legend');
 
     brainControls.innerHTML = '';
@@ -927,59 +927,78 @@
     brainControls.appendChild(header);
 
     const materials = modelViewer.model.materials;
-    const brainRegions = materials.filter(m => m.name && m.name !== 'root');
-    DebugModule.log(`Adding ${brainRegions.length} regions to legend`);
+    
+    // MODIFIED: Extract regions with values and sort them
+    const brainRegions = materials
+        .filter(m => m.name && m.name !== 'root')
+        .map(material => {
+            // Parse the name and value
+            const parts = material.name.split('|');
+            const name = parts[0];
+            const value = parts.length > 1 ? parseFloat(parts[1]) : 0;
+            
+            return {
+                material: material,
+                name: name,
+                value: value
+            };
+        })
+        // Sort by value in descending order (highest values first)
+        .sort((a, b) => b.value - a.value);
+
+    DebugModule.log(`Adding ${brainRegions.length} regions to legend (sorted by value)`);
 
     // Create a control for each brain region
-    brainRegions.forEach((material, index) => {
-      const control = document.createElement('div');
-      control.className = 'region-control';
+    brainRegions.forEach((region, index) => {
+        const control = document.createElement('div');
+        control.className = 'region-control';
 
-      // Create region header (color box + name)
-      const regionHeader = document.createElement('div');
-      regionHeader.className = 'region-header';
+        // Create region header (color box + name)
+        const regionHeader = document.createElement('div');
+        regionHeader.className = 'region-header';
 
-      const colorBox = document.createElement('div');
-      colorBox.className = 'color-box';
-      colorBox.style.backgroundColor = getColorForMaterial(material, index);
+        const colorBox = document.createElement('div');
+        colorBox.className = 'color-box';
+        colorBox.style.backgroundColor = getColorForMaterial(region.material, index);
 
-      const nameSpan = document.createElement('span');
-      nameSpan.className = 'region-name';
-      nameSpan.textContent = material.name;
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'region-name';
+        nameSpan.textContent = region.name;
 
-      regionHeader.appendChild(colorBox);
-      regionHeader.appendChild(nameSpan);
+        regionHeader.appendChild(colorBox);
+        regionHeader.appendChild(nameSpan);
 
-      const highlightBtn = document.createElement('button');
-      highlightBtn.textContent = 'Highlight';
-      highlightBtn.className = 'region-button';
-      highlightBtn.onclick = () => highlightRegionWithBlink(material.name, modelViewer);
+        const highlightBtn = document.createElement('button');
+        highlightBtn.textContent = 'Highlight';
+        highlightBtn.className = 'region-button';
+        highlightBtn.onclick = () => highlightRegionWithBlink(region.name, modelViewer);
 
-      control.appendChild(regionHeader);
-      control.appendChild(highlightBtn);
+        control.appendChild(regionHeader);
+        control.appendChild(highlightBtn);
 
-      brainControls.appendChild(control);
+        brainControls.appendChild(control);
 
-      materialMap.set(material.name, material);
+        // Store in materialMap with region name as key
+        materialMap.set(region.name, region.material);
 
-      originalStates.set(material.name, {
-        alpha: material.alpha,
-        alphaMode: material.alphaMode,
-        alphaCutoff: material.alphaCutoff
-      });
+        originalStates.set(region.name, {
+            alpha: region.material.alpha,
+            alphaMode: region.material.alphaMode,
+            alphaCutoff: region.material.alphaCutoff
+        });
 
-      if (material.pbrMetallicRoughness && material.pbrMetallicRoughness.baseColorFactor) {
-        originalColors.set(material.name, [...material.pbrMetallicRoughness.baseColorFactor]);
-      }
+        if (region.material.pbrMetallicRoughness && region.material.pbrMetallicRoughness.baseColorFactor) {
+            originalColors.set(region.name, [...region.material.pbrMetallicRoughness.baseColorFactor]);
+        }
     });
 
     toggleControlsBtn.style.display = 'flex';
     brainControls.style.display = 'block';
 
     setTimeout(() => {
-      brainControls.style.display = 'none';
+        brainControls.style.display = 'none';
     }, 3000);
-  }
+}
 
   function highlightRegionWithBlink(regionName, modelViewer) {
     DebugModule.log(`Highlighting region with color blink effect: ${regionName}`);
